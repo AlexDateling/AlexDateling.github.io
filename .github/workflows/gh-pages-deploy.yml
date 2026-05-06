@@ -31,14 +31,21 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'  # Latest LTS
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
+      - name: Run tests
+        run: npm test -- --coverage --watchAll=false
+        env:
+          CI: true
+
       - name: Build
         run: npm run build
+        env:
+          CI: true
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -46,7 +53,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./build
+          path: ./dist
 
   deploy:
     environment:
